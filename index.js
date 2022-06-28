@@ -170,7 +170,7 @@ function getNews(CT,CAT,Search)
     /*--Incase the user didn't search and chose a cat or country-*/
     if(Search==0)
     {
-        req.open("GET","https://newsapi.org/v2/top-headlines?country="+CT+"&category="+CAT+"&apiKey=6ae3e6f1aed346f993acd380ae98acaf");
+        req.open("GET","https://newsapi.org/v2/top-headlines?country="+CT+"&category="+CAT+"&apiKey=2f4b8c99e79748a3a58b9c19f8424baf");
         req.onreadystatechange =function()
         {
             if(req.status==200 && req.readyState==4)
@@ -188,7 +188,7 @@ function getNews(CT,CAT,Search)
     else
     {
         var searchText=CAT;
-         req.open("GET"," https://newsapi.org/v2/everything?q="+searchText+"&from=2019-08-20&to=2019-08-20&sortBy=popularity&apiKey=6ae3e6f1aed346f993acd380ae98acaf");
+         req.open("GET"," https://newsapi.org/v2/everything?q="+searchText+"&from=2019-08-20&to=2019-08-20&sortBy=popularity&apiKey=2f4b8c99e79748a3a58b9c19f8424baf");
        
         req.onreadystatechange =function()
         {
