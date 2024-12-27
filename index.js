@@ -5,7 +5,7 @@
                                 /*-----------------------------------*/
 
 
-var req = new XMLHttpRequest();
+var req = new XMLHttpRequest(); /*http client*/
 var search = document.getElementById("search");
 var Catlink = document.getElementsByClassName("nav-link");
 var Countrylink= document.getElementsByClassName("list-group-item");
@@ -13,18 +13,18 @@ var CountryShortcut=["us","ar","au","at","be","br","bg","ca","cn","co","cu","cz"
 
 
 
-var cat="general";
+var cat="";
 var country="us";
 var SearchBoolean=0;
-getNews(country,cat,SearchBoolean);
+getNews(country,"",SearchBoolean);
 chooseNews();
 
-search.addEventListener("blur", function(e)
-                        {
-                            SearchBoolean=1;
-                            getNews("",search.value,SearchBoolean);
-                        }
-                       )
+search.addEventListener("keyup", function(e)
+    {
+        SearchBoolean=1;
+        getNews("",search.value,SearchBoolean);
+    }
+)
 
 
 function chooseNews()
@@ -58,7 +58,7 @@ function chooseNews()
                             document.getElementById("headlineCat").innerHTML="General";
                             document.getElementById("headlineCountry").innerHTML=e.target.innerHTML+"'s";
                             country=CountryShortcut[i];
-                            cat="general";
+                            cat="";
                         }
                         
                         /*Incase the user didn't perform any search*/
@@ -170,13 +170,20 @@ function getNews(CT,CAT,Search)
     /*--Incase the user didn't search and chose a cat or country-*/
     if(Search==0)
     {
-        req.open("GET","https://newsapi.org/v2/top-headlines?country="+CT+"&category="+CAT+"&apiKey=2f4b8c99e79748a3a58b9c19f8424baf");
+        var urlRequest;
+        if(CAT == "") {
+            urlRequest = "https://newsdata.io/api/1/news?apikey=pub_63519a669ca70c8c60ff0f8017dfac2c7f90b&country="+CT+"&language=en";
+        }
+        else { 
+            urlRequest = "https://newsdata.io/api/1/news?apikey=pub_63519a669ca70c8c60ff0f8017dfac2c7f90b&country="+CT+"&language=en&category="+CAT+"";
+        }
+        req.open("GET",urlRequest);
         req.onreadystatechange =function()
         {
             if(req.status==200 && req.readyState==4)
             {
                 data=JSON.parse(req.response);
-                data=data.articles;
+                data=data.results;
                 displayData();
             }
         }
@@ -188,14 +195,14 @@ function getNews(CT,CAT,Search)
     else
     {
         var searchText=CAT;
-         req.open("GET"," https://newsapi.org/v2/everything?q="+searchText+"&from=2019-08-20&to=2019-08-20&sortBy=popularity&apiKey=2f4b8c99e79748a3a58b9c19f8424baf");
+         req.open("GET","https://newsdata.io/api/1/news?apikey=pub_63519a669ca70c8c60ff0f8017dfac2c7f90b&q="+searchText+"&language=en");
        
         req.onreadystatechange =function()
         {
             if(req.status==200 && req.readyState==4)
             {
                 data=JSON.parse(req.response);
-                data=data.articles;
+                data=data.results;
                 document.getElementById("headlineCat").innerHTML=searchText+"'s";
                 document.getElementById("headlineCountry").innerHTML="";
                 displayData();
@@ -215,8 +222,8 @@ function displayData()
     for(var i=0; i<data.length; i++)
     {
         temp+=`<div class="col-3  text-center">
-                    <a href="`+data[i].url+`" target="_blank">
-                        <img src="`+data[i].urlToImage+`" class="img-fluid">
+                    <a href="`+data[i].link+`" target="_blank">
+                        <img src="`+data[i].image_url+`" class="img-fluid">
                         
                         <div class="p-2">
                             <h5>`+data[i].title+`</h5>
