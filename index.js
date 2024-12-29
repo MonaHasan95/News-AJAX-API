@@ -76,8 +76,8 @@ function chooseNews()
                 getNews(country,cat,SearchBoolean);
             });
     }
-    
-    
+
+
     /*I didn't do this section in a for loop because it's time consuming*/
     /*-----------------------------------------------------------*/
         Catlink[0].addEventListener("click",function(e)
